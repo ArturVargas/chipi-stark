@@ -1,0 +1,56 @@
+
+local-devnet
+packages/nextjs/.env
+packages/nextjs/node_modules/
+
+# Next.js
+.next/
+out/
+.cache/
+dist/
+node_modules/
+
+# Environment variables
+.env.local
+.env.development.local
+.env.test.local
+.env.production.local
+
+# Build artifacts
+build/
+out/
+public/
+
+# IDE
+.DS_Store
+.idea/
+.vscode/
+
+# Package manager
+yarn.lock
+npm-debug.log*
+package-lock.json
+
+# Logs
+logs/
+*.log
+
+# Testing
+coverage/
+
+# Miscellaneous
+*.bak
+*.swp
+*.tmp
+
+# Yarn cache
+.yarn/cache/
+# yarn / eslint
+.yarn/*
+!.yarn/patches
+!.yarn/plugins
+!.yarn/releases
+!.yarn/sdks
+!.yarn/versions
+.eslintcache
+.DS_Store
