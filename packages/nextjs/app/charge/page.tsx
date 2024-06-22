@@ -7,17 +7,11 @@ import QRCode from "react-qr-code";
 export default function Cobrar() {
   const router = useRouter();
   const [amount, setAmount] = useState<string>("");
-  const [paymentLink, setPaymentLink] = useState<string>("");
+  const [paymentLink, setPaymentLink] = useState<string | null>(null);
+  const invoiceAddress = "0x1234567890";
 
   const generateInvoice = async () => {
-    // const currentWallet = user.publicMetadata.walletAddress as string;
-    // console.log("currentWallet", currentWallet);
-    // if (!currentWallet) {
-    //   console.warn("User does not have a wallet!");
-    //   router.push("/setup");
-    //   return;
-    // }
-    setPaymentLink(`https://www.starkware.co/`);
+    setPaymentLink(`http://localhost:3000/pay/${invoiceAddress}?amount=${amount}`);
   };
 
   if (paymentLink) {

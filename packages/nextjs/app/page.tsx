@@ -10,21 +10,38 @@ import {
 import { Address } from "~~/components/scaffold-stark";
 import { useAccount } from "@starknet-react/core";
 import { Address as AddressType } from "@starknet-react/chains";
+import {
+  DynamicWidget,
+  useIsLoggedIn,
+  useUserWallets,
+} from "@dynamic-labs/sdk-react-core";
 
 const Home: NextPage = () => {
+  const isLoggedIn = useIsLoggedIn();
   const connectedAddress = useAccount();
+  const userWallets = useUserWallets();
+  console.log("userWallets", userWallets);
+
+  if (!isLoggedIn) {
+    return (
+      <main className="mx-auto flex h-full sm:pt-0 mt-8 w-full flex-col items-center justify-center gap-4 px-5 sm:w-1/2 sm:px-0">
+        <div className="flex w-full flex-col items-center gap-4 rounded-xl border-2 border-black bg-white p-6 shadow-[2px_2px_0px_rgba(0,0,0,1)] ">
+          <p className="truncate text-sm font-medium text-gray-500">
+            Please connect your wallet to proceed
+          </p>
+          <DynamicWidget />
+        </div>
+      </main>
+    );
+  }
   return (
     <main className="mx-auto flex h-full sm:pt-0 mt-8 w-full flex-col items-center justify-center gap-4 px-5 sm:w-1/2 sm:px-0">
-      <div className="flex items-center justify-center">
-        <img
-          src="https://i.pravatar.cc/300"
-          alt="Profile Picture"
-          className="h-24 w-24 border-2 border-black shadow-[2px_2px_0px_rgba(0,0,0,1)] rounded-full"
-        />
+      <div className=" w-full">
+        <DynamicWidget />
       </div>
       <div className="mb-5 flex w-full flex-col items-center gap-4 rounded-xl border-2 border-black bg-white p-6 shadow-[2px_2px_0px_rgba(0,0,0,1)] ">
         <p className="mb-2 text-3xl font-semibold tracking-wide sm:text-5xl">
-          {100.6232.toFixed(2)}
+          {33.33}
           <span className="text-xl font-medium"> USD</span>
         </p>
         <p className="truncate text-sm font-medium text-gray-500">
