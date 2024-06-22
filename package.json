@@ -25,8 +25,10 @@
     "vercel:yolo": "yarn workspace @ss-2/nextjs vercel:yolo"
   },
   "dependencies": {
+    "@tanstack/react-query": "^5.45.1",
     "next-qrcode": "^2.5.1",
     "postcss": "^8.4.38",
+    "react-qr-code": "^2.0.15",
     "viem": "^2.16.1"
   },
   "devDependencies": {
