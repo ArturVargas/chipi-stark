@@ -1,19 +1,30 @@
 "use client";
+import { useDynamicContext } from "@dynamic-labs/sdk-react-core";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { SuccessMessage } from "~~/components/alerts/SuccessMessage";
 import { WarningMessage } from "~~/components/alerts/WarningMessage";
 import { GoBackArrow } from "~~/components/navigation/GoBackArrow";
+import { useWithdrawFunds } from "~~/hooks/useWithdrawFunds";
 
 export default function Withdraw() {
+  const { user } = useDynamicContext();
   const [hasReadWarning, setHasReadWarning] = useState<boolean>(false);
   const router = useRouter();
   const [amount, setAmount] = useState<string>("");
   const [showSuccess, setShowSuccess] = useState<boolean>(false);
+  const {mutateAsync: withdrawFunds} = useWithdrawFunds();
   // const { mutateAsync: signTransaction } = useSignTransaction();
 
   const withdrawMoney = async () => {
+    if (!user){
+      alert("You need to log in!");
+      router.push("/");
+      return
+    }
+    if (!amount) return;
     alert("Withdraw money!");
+    await withdrawFunds({email: user.email || "", amount: parseFloat(amount)});
     setShowSuccess(true);
   };
 

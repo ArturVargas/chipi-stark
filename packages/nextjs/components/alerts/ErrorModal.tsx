@@ -12,7 +12,7 @@ export function ErrorModal({ errorMessage }: ErrorModalProps) {
     <div className="mx-4 my-4 max-w-md border-4 border-black bg-white p-8 shadow-[8px_8px_0px_rgba(0,0,0,1)] sm:mx-auto sm:my-8 md:max-w-lg lg:max-w-xl">
       <div>
         <h1 className="mb-4 text-center text-2xl sm:text-3xl">
-          Uuuy algo salió mal
+          Uuuu something went wrong:
         </h1>
         <p className="mb-4 text-center text-lg sm:text-xl">{errorMessage}</p>
         <div className="w-full rounded-xl border-2 border-black bg-white shadow-[8px_8px_0px_rgba(0,0,0,1)]">
@@ -20,7 +20,7 @@ export function ErrorModal({ errorMessage }: ErrorModalProps) {
             <img
               src="https://media0.giphy.com/media/v1.Y2lkPTc5MGI3NjExZzg4ZnJwaG81Z25idHBmaXBjcGhzcjdhaGd6ZTdyNWlpcnE5aXl2eCZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9Zw/jb3YXUSm1P1FuuELYi/giphy.webp"
               alt="slooow"
-              className="h-48 w-full rounded-xl object-cover"
+              className="h-50 w-full rounded-xl object-cover"
             />
           </div>
         </div>

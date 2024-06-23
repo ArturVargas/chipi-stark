@@ -3,15 +3,36 @@ import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { GoBackArrow } from "~~/components/navigation/GoBackArrow";
 import QRCode from "react-qr-code";
+import { useFetchStarknetAccountByEmail } from "~~/hooks/useFetchStarknetAccountByEmail";
+import { useDynamicContext } from "@dynamic-labs/sdk-react-core";
+import CopyToClipboard from "react-copy-to-clipboard";
+import { SuccessMessage } from "~~/components/alerts/SuccessMessage";
 
 export default function Cobrar() {
   const router = useRouter();
   const [amount, setAmount] = useState<string>("");
   const [paymentLink, setPaymentLink] = useState<string | null>(null);
-  const invoiceAddress = "0x1234567890";
+  const { user } = useDynamicContext();
+  const { data: invoiceAddress } = useFetchStarknetAccountByEmail(
+    user?.email || ""
+  );
+  // const invoiceAddress = "0x0546501475912C61eA1862693D2f4A542050A64619bAE0492250c57dCd0E2AAa"
+  const [linkCopied, setLinkCopied] = useState(false);
 
   const generateInvoice = async () => {
-    setPaymentLink(`http://localhost:3000/pay/${invoiceAddress}?amount=${amount}`);
+    if (!invoiceAddress) {
+      alert("email not found! you need to log in!");
+      router.push("/");
+      return;
+    }
+    setPaymentLink(
+      `http://localhost:3000/pay/${invoiceAddress}?amount=${amount}`
+    );
+  };
+
+  const onCopyText = () => {
+    setLinkCopied(true);
+    setTimeout(() => setLinkCopied(false), 1500); // Reset status after 1.5 seconds
   };
 
   if (paymentLink) {
@@ -23,9 +44,19 @@ export default function Cobrar() {
         <div className="flex w-full flex-col items-center rounded-xl border-2 border-black bg-white p-6 ">
           <p className="mb-2 text-2xl font-semibold tracking-wide sm:text-3xl">
             ${amount}
-            <span className="text-xl font-medium"> USD</span>
+            <span className="text-xl font-medium"> ETH</span>
           </p>
         </div>
+        <CopyToClipboard text={paymentLink} onCopy={onCopyText}>
+          <button className="h-16 w-full rounded-xl border-2 border-black bg-rose-300 p-2.5 text-base	 font-semibold hover:bg-rose-400 active:bg-rose-500">
+            🤝 Copy Payment link
+          </button>
+        </CopyToClipboard>
+        {linkCopied && (
+          <div className="absolute bottom-4 w-full px-4 pb-4">
+            <SuccessMessage message="Link in clipboard" />
+          </div>
+        )}
         <div className=" grid place-content-center items-center justify-center rounded-xl border-2 border-black bg-white px-4 py-4 ">
           <QRCode
             value={paymentLink}

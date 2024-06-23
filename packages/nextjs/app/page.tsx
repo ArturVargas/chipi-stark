@@ -8,19 +8,51 @@ import {
   CreditCardIcon,
 } from "@heroicons/react/24/outline";
 import { Address } from "~~/components/scaffold-stark";
-import { useAccount } from "@starknet-react/core";
+import { useAccount, useBalance } from "@starknet-react/core";
 import { Address as AddressType } from "@starknet-react/chains";
 import {
   DynamicWidget,
+  useDynamicContext,
   useIsLoggedIn,
+  useTokenBalances,
   useUserWallets,
 } from "@dynamic-labs/sdk-react-core";
+import { useEffect } from "react";
+import { useFetchStarknetAccountByEmail } from "~~/hooks/useFetchStarknetAccountByEmail";
+import { useCreateStarknetAccount } from "~~/hooks/useCreateStarknetAccount";
 
 const Home: NextPage = () => {
+  const { user } = useDynamicContext();
+  const { data: starknetAccount } = useFetchStarknetAccountByEmail(
+    user?.email || ""
+  );
+  const { mutateAsync: createStarknetAccout } = useCreateStarknetAccount();
   const isLoggedIn = useIsLoggedIn();
   const connectedAddress = useAccount();
   const userWallets = useUserWallets();
   console.log("userWallets", userWallets);
+  const {
+    isLoading,
+    isError,
+    error,
+    data: balanceData,
+  } = useBalance({
+    address: "0x0546501475912C61eA1862693D2f4A542050A64619bAE0492250c57dCd0E2AAa",
+    watch: true,
+  });
+
+  console.log("balanceData", balanceData);
+
+  useEffect(() => {
+    if (!starknetAccount || !user) return;
+    console.log("starknetAccount", starknetAccount);
+    if (starknetAccount === "none") {
+      createStarknetAccout({
+        email: user?.email || "",
+        businessName: user?.alias || "",
+      });
+    }
+  }, [starknetAccount, user, createStarknetAccout]);
 
   if (!isLoggedIn) {
     return (
@@ -41,8 +73,8 @@ const Home: NextPage = () => {
       </div>
       <div className="mb-5 flex w-full flex-col items-center gap-4 rounded-xl border-2 border-black bg-white p-6 shadow-[2px_2px_0px_rgba(0,0,0,1)] ">
         <p className="mb-2 text-3xl font-semibold tracking-wide sm:text-5xl">
-          {33.33}
-          <span className="text-xl font-medium"> USD</span>
+          {balanceData?.formatted}
+          <span className="text-xl font-medium"> ETH</span>
         </p>
         <p className="truncate text-sm font-medium text-gray-500">
           TOTAL BALANCE
