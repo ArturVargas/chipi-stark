@@ -14,7 +14,7 @@ async function withdrawFunds(
     throw new Error("backendUrl URL is not defined");
   }
   const response = await axios.post(
-    `${backendUrl}/api/foo/bar`,
+    `${backendUrl}/withdraw`,
     withdrawFundsInput,
     {
       headers: { "Content-Type": "application/json" },

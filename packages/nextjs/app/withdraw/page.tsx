@@ -23,7 +23,6 @@ export default function Withdraw() {
       return
     }
     if (!amount) return;
-    alert("Withdraw money!");
     await withdrawFunds({email: user.email || "", amount: parseFloat(amount)});
     setShowSuccess(true);
   };

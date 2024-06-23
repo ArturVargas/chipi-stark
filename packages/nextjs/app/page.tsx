@@ -28,25 +28,14 @@ const Home: NextPage = () => {
   );
   const { mutateAsync: createStarknetAccout } = useCreateStarknetAccount();
   const isLoggedIn = useIsLoggedIn();
-  const connectedAddress = useAccount();
-  const userWallets = useUserWallets();
-  console.log("userWallets", userWallets);
-  const {
-    isLoading,
-    isError,
-    error,
-    data: balanceData,
-  } = useBalance({
-    address: "0x0546501475912C61eA1862693D2f4A542050A64619bAE0492250c57dCd0E2AAa",
-    watch: true,
-  });
 
-  console.log("balanceData", balanceData);
 
   useEffect(() => {
+    console.log("using effect");
     if (!starknetAccount || !user) return;
     console.log("starknetAccount", starknetAccount);
-    if (starknetAccount === "none") {
+    console.log("starknetAccount", starknetAccount);
+    if (starknetAccount === "0xNone") {
       createStarknetAccout({
         email: user?.email || "",
         businessName: user?.alias || "",
@@ -73,7 +62,7 @@ const Home: NextPage = () => {
       </div>
       <div className="mb-5 flex w-full flex-col items-center gap-4 rounded-xl border-2 border-black bg-white p-6 shadow-[2px_2px_0px_rgba(0,0,0,1)] ">
         <p className="mb-2 text-3xl font-semibold tracking-wide sm:text-5xl">
-          {balanceData?.formatted}
+          {21}
           <span className="text-xl font-medium"> ETH</span>
         </p>
         <p className="truncate text-sm font-medium text-gray-500">

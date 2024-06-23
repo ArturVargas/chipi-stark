@@ -14,13 +14,13 @@ async function createStarknetAccount(
     throw new Error("backendUrl URL is not defined");
   }
   const response = await axios.post(
-    `${backendUrl}/api/foo/bar`,
+    `${backendUrl}/create-account`,
     createStarknetAccountInput,
     {
       headers: { "Content-Type": "application/json" },
     }
   );
-  return response.data;
+  return response.data.address
 }
 
 export const useCreateStarknetAccount = () => {

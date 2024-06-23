@@ -10,12 +10,12 @@ async function fetchStarknetAccountByEmail(email: string) {
       throw new Error("backendUrl URL is not defined");
     }
     const response = await axios.get(
-      `${backendUrl}/api/foo`,
+      `${backendUrl}/get-account/${email}`,
       {
         headers: { "Content-Type": "application/json" },
       },
     );
-    return response.data;
+    return response.data.message
 }
 
 
