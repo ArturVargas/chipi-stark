@@ -41,6 +41,11 @@ New users sign-up or connect their self-custodial wallet with funds. They can us
 <p>
 
 4. Receive your money instantly in your local currency 🎉🎉🎉
+<p align="center">
+    <br>
+    <img src="public/withdraw.png" width="500"/>
+    <br>
+<p>
 
 
 ### User
