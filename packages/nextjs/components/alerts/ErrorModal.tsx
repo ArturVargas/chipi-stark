@@ -29,7 +29,7 @@ export function ErrorModal({ errorMessage }: ErrorModalProps) {
             onClick={retry}
             className="w-full rounded-full border-2 border-black bg-[#A6FAFF] px-5 py-4 text-lg hover:bg-[#79F7FF] hover:shadow-[2px_2px_0px_rgba(0,0,0,1)] active:bg-[#00E1EF]"
           >
-            Reintentarlo
+            Retry
           </button>
         </div>
       </div>
