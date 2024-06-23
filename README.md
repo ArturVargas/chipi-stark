@@ -6,11 +6,9 @@ We are builders from Mexico City starting our journey to bring web2-ish UX for p
 There are 122 M people that remains unbanked in LATAM. Those who the only alternative for their daily transactions is cash. We can encourage them by bringing a cheaper option than Visa/Mastercard to accept digital payments.
 
 
-<p align="center">
-    <br>
-    <img src="https://raw.githubusercontent.com/robertoyamanaka/chipi-pay/main/public/chipi-pay-logo.png?token=GHSAT0AAAAAACGPPSDEENXQN3IEBA46UU5QZTYGJWA" width="500"/>
-    <br>
-<p>
+
+<img width="300" alt="image" src="https://github.com/ArturVargas/chipi-stark/assets/66660150/c2cfa740-e31a-4bcf-81bd-62f22494f1c9">
+
 
 ## Relevant Links
 
