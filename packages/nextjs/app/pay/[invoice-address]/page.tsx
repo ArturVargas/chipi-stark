@@ -12,16 +12,18 @@ import { WalletButton } from "~~/components/WalletButton";
 import { ErrorModal } from "~~/components/alerts/ErrorModal";
 import { erc20ABI } from "~~/library/erc20Abi";
 import { SuccessModal } from "~~/components/alerts/SuccessModal";
+import { CallData, Uint256, cairo, uint256 } from "starknet";
 
 export default function PayInvoice() {
   const router = useRouter();
   const params = useParams();
   const searchParams = useSearchParams();
-  const invoiceAddress = params["invoice-address"] as string;
+  const address = params["invoice-address"] as string;
   const amount = searchParams.get("amount");
   const { connect, connectors } = useConnect();
-  const { account, address, status } = useAccount();
+  const { account, address: accountAddress, status } = useAccount();
   const { chain } = useNetwork();
+  const [error, setError] = useState<string | null>(null);
 
   const { contract } = useContract({
     abi: erc20ABI,
@@ -30,20 +32,35 @@ export default function PayInvoice() {
 
   const calls = useMemo(() => {
     if (!address || !contract) return [];
+    // cast amount to Uint256
+    // const bigIntAmount = BigInt(amount + "n" as string)
+    const bigAmount = Number(amount) * 10**18
+    const bigAmountString = bigAmount.toString()
+    const cairoAmount = cairo.uint256(bigAmountString);
     return contract.populateTransaction["transfer"]!(address, {
-      low: 1,
-      high: 0,
+      low: cairoAmount.low,
+      high: cairoAmount.high,
     });
   }, [contract, address]);
 
-  const { writeAsync, data, isPending, isError } = useContractWrite({
+  const { writeAsync, data, isPending } = useContractWrite({
     calls,
   });
 
-  if (isError) {
+
+  const triggerWrite = async () => {
+    try {
+      await writeAsync();
+    } catch (error) {
+      setError("error signing");
+      console.error("error", error);
+    }
+  }
+
+  if (error) {
     return (
       <div className="flex h-full flex-col items-center justify-center">
-        <ErrorModal errorMessage={"error signing"} />
+        <ErrorModal errorMessage={"error signing transaction"} />
       </div>
     );
   }
@@ -63,20 +80,20 @@ export default function PayInvoice() {
     <main className="z-0 mx-auto  flex h-full w-full flex-col items-center justify-around gap-4 px-5 py-7 sm:w-1/2 sm:px-0 sm:py-5">
       <div className="flex w-full flex-col items-center gap-4">
         <div
-          className={`flex w-full items-center ${address ? "justify-end" : "justify-center"}`}
+          className={`flex w-full items-center ${accountAddress ? "justify-end" : "justify-center"}`}
         >
           <WalletButton
-            walletAddress={address}
+            walletAddress={accountAddress}
             onClickWallet={() => connect({ connector: connectors[0] })}
           />
         </div>
-        {address ? (
+        {accountAddress ? (
           <>
             <div className=" flex w-full flex-col items-center gap-4 rounded-xl border-2 border-black bg-white p-6 shadow-[2px_2px_0px_rgba(0,0,0,1)]">
               <div className="flex flex-col items-center">
                 <p className="mb-2 text-3xl font-semibold tracking-wide sm:text-5xl">
                   ${amount}
-                  <span className="text-xl font-medium">USD</span>
+                  <span className="text-xl font-medium">ETH</span>
                 </p>
                 <p className="truncate text-sm font-medium text-gray-500">
                   Amount to pay
@@ -84,7 +101,7 @@ export default function PayInvoice() {
               </div>
             </div>
             <button
-              onClick={() => writeAsync()}
+              onClick={triggerWrite}
               className={`h-16 w-full rounded-xl border-2 border-black p-2.5 text-xl font-semibold hover:bg-amber-500 active:bg-amber-600 bg-amber-400`}
             >
               Pay
