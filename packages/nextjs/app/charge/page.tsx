@@ -44,7 +44,7 @@ export default function Cobrar() {
         <div className="flex w-full flex-col items-center rounded-xl border-2 border-black bg-white p-6 ">
           <p className="mb-2 text-2xl font-semibold tracking-wide sm:text-3xl">
             ${amount}
-            <span className="text-xl font-medium"> ETH</span>
+            <span className="text-xl font-medium"> MXN</span>
           </p>
         </div>
         <CopyToClipboard text={paymentLink} onCopy={onCopyText}>

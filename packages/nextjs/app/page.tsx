@@ -26,6 +26,7 @@ const Home: NextPage = () => {
   const { data: starknetAccount } = useFetchStarknetAccountByEmail(
     user?.email || ""
   );
+  console.log("starknetAccount", starknetAccount);
   const { mutateAsync: createStarknetAccout } = useCreateStarknetAccount();
   const isLoggedIn = useIsLoggedIn();
 
@@ -63,7 +64,7 @@ const Home: NextPage = () => {
       <div className="mb-5 flex w-full flex-col items-center gap-4 rounded-xl border-2 border-black bg-white p-6 shadow-[2px_2px_0px_rgba(0,0,0,1)] ">
         <p className="mb-2 text-3xl font-semibold tracking-wide sm:text-5xl">
           {21}
-          <span className="text-xl font-medium"> ETH</span>
+          <span className="text-xl font-medium"> MXN</span>
         </p>
         <p className="truncate text-sm font-medium text-gray-500">
           TOTAL BALANCE

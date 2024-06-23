@@ -13,6 +13,8 @@ import { ErrorModal } from "~~/components/alerts/ErrorModal";
 import { erc20ABI } from "~~/library/erc20Abi";
 import { SuccessModal } from "~~/components/alerts/SuccessModal";
 import { CallData, Uint256, cairo, uint256 } from "starknet";
+import { useFetchMxnUsdPrice } from "~~/hooks/useFetchMxnUsdPrice";
+import { useFetchEthUsdPrice } from "~~/hooks/useFetchEthUsdPrice";
 
 export default function PayInvoice() {
   const router = useRouter();
@@ -25,6 +27,10 @@ export default function PayInvoice() {
   const { chain } = useNetwork();
   const [error, setError] = useState<string | null>(null);
 
+  const { data: mxnUsd, isLoading: mxnLoading } = useFetchMxnUsdPrice();
+  const { data: ethUsd, isLoading: ethLoading } = useFetchEthUsdPrice();
+  
+
   const { contract } = useContract({
     abi: erc20ABI,
     address: chain.nativeCurrency.address,
@@ -32,16 +38,19 @@ export default function PayInvoice() {
 
   const calls = useMemo(() => {
     if (!address || !contract) return [];
+    if ( !mxnUsd || !ethUsd ) return;
+
     // cast amount to Uint256
     // const bigIntAmount = BigInt(amount + "n" as string)
-    const bigAmount = Number(amount) * 10**18
+    const amountInEth = Number(amount) * mxnUsd / ethUsd;
+    const bigAmount = (amountInEth * 10**18).toFixed(0);
     const bigAmountString = bigAmount.toString()
     const cairoAmount = cairo.uint256(bigAmountString);
     return contract.populateTransaction["transfer"]!(address, {
       low: cairoAmount.low,
       high: cairoAmount.high,
     });
-  }, [contract, address]);
+  }, [contract, address,mxnUsd, ethUsd]);
 
   const { writeAsync, data, isPending } = useContractWrite({
     calls,
@@ -93,7 +102,7 @@ export default function PayInvoice() {
               <div className="flex flex-col items-center">
                 <p className="mb-2 text-3xl font-semibold tracking-wide sm:text-5xl">
                   ${amount}
-                  <span className="text-xl font-medium">ETH</span>
+                  <span className="text-xl font-medium">MXN</span>
                 </p>
                 <p className="truncate text-sm font-medium text-gray-500">
                   Amount to pay

@@ -15,7 +15,7 @@ async function fetchStarknetAccountByEmail(email: string) {
         headers: { "Content-Type": "application/json" },
       },
     );
-    return response.data.message
+    return response.data.address
 }
 
 
